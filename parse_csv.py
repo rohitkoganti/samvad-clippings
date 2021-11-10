@@ -12,13 +12,13 @@ def parse_csv(filename):
     sheet = wb.active
     print("Parse: Attempting to parse headlines...")
 
-    if sheet['A3'].value == 'S. NO.' and sheet['D3'].value == 'CONTENT' and sheet['E3'].value == 'PUBLICATION' \
-        and sheet['F3'].value == 'JOURNALIST' and sheet['G3'].value == 'NEWS LINK':
+    if sheet['A3'].value == 'S. NO.' and sheet['E3'].value == 'CONTENT' and sheet['F3'].value == 'PUBLICATION' \
+        and sheet['G3'].value == 'JOURNALIST' and sheet['H3'].value == 'NEWS LINK':
         for row in sheet.iter_rows(min_row=4, max_row=sheet.max_row):
             headline = []
-            for cell in row[:6]:
+            for cell in row[:7]:
                 headline.append(cell.value)
-            headline.append(row[6].hyperlink.target)
+            headline.append(row[7].hyperlink.target)
             headlines.append(headline)
         print(headlines)
         print("Parse: Successfully parsed headlines.")

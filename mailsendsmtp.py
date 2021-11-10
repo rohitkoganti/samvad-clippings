@@ -10,7 +10,7 @@ from datetime import date
 
 mail_head = '''<html>
 Dear sir,
-<br>Please find attached online articles from yesterday relevant to HVPI. Following are the headlines:
+<br>Please find attached today's newspaper clippings relevant to HVPI. Following are the headlines:
 <br><br>
 '''
 
@@ -35,17 +35,17 @@ def send_mail(sender_name, sender_address, sender_pass, receiver_address, filena
     message = MIMEMultipart()
     message['From'] = sender_name
     message['To'] = ', '.join(receiver_address)
-    message['Subject'] = 'HVPI Online Articles - ' + date.today().strftime("%d %B")
+    message['Subject'] = 'HVPI Print Articles - ' + date.today().strftime("%d %B")
 
     #The body and the attachments for the mail
     body = ''
     for i,line in enumerate(headlines):
-        title = line[3]
-        source = line[4]
-        journalist = line[5]
+        title = line[4]
+        source = line[5]
+        journalist = line[6]
         if journalist == '':
             journalist = 'NA'
-        link = line[6]
+        link = line[7]
         body+= str(i+1) + '. <b>' + title + '</b>' + ' <br>'
         body+= 'Source: ' + source + '&ensp;|&ensp;' + 'Journalist: ' + journalist + ' <br>'
         body+= 'Link: ' + link + ' <br><br>'

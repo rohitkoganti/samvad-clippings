@@ -30,8 +30,8 @@ def main():
 
     browser = login(url, samvad_id, samvad_pw, download_dir)
     if browser:
-        browser, online_articles = browse_search(browser)
-        if online_articles:
+        browser, print_articles = browse_search(browser)
+        if print_articles:
             browser, pdf_file = browse_download_pdf(browser, download_dir)
             if pdf_file:
                 csv_file = browse_download_csv(browser, download_dir)
@@ -50,7 +50,7 @@ def main():
             else:
                 print('Download: Failed to download pdf. Looping back.')
         else:
-            print('Search: No online articles found. Looping back.')
+            print('Search: No print articles found. Looping back.')
     else:
         print('Login: Failed to log-in into Samvad. Looping back.')
 

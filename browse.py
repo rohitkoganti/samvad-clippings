@@ -51,7 +51,7 @@ def login(url, samvad_id, samvad_pw, download_dir):
 
 def browse_search(browser):
 
-    online_articles = None
+    print_articles = None
     print("Browse: Browsing to the search tab and searching for articles in the given date range.")
     browser.get('https://samvad.media/collectionSearch')
 
@@ -62,34 +62,34 @@ def browse_search(browser):
     dropdown = browser.find_element_by_class_name('dropdown-form')
     dropdown.click()
 
-    yesterday = (date.today() - timedelta(days=1)).strftime('%d-%m-%Y')
+    today = date.today().strftime('%d-%m-%Y')
 
     start_date = browser.find_element_by_id("dateFrom")
-    start_date.clear()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
-    start_date.send_keys(yesterday)
+    start_date.clear()
+    start_date.send_keys(today)
 
     end_date = browser.find_element_by_id("dateTo")
     end_date.clear()
-    end_date.send_keys(yesterday)
+    end_date.send_keys(today)
 
     browser.find_element_by_css_selector('.query-btn > a:nth-child(1)').click()
 
     time.sleep(5)
 
-    #Select only online articles
-    checkbox = browser.find_element_by_css_selector('#facetMedia > li:nth-child(1) > a:nth-child(1) > input:nth-child(1)')
-    if checkbox.get_property('name') == 'Online':
-        print("Browse: Found online articles in the given date range. Selecting only them..")
-        online_articles = True
+    #Select only print articles
+    checkbox = browser.find_element_by_css_selector('#facetMedia > li:nth-child(2) > a:nth-child(1) > input:nth-child(1)')
+    if checkbox.get_property('name') == 'Print':
+        print("Browse: Found print articles in the given date range. Selecting only them..")
+        print_articles = True
         checkbox.click()
         shortlist = browser.find_element_by_css_selector('.btn-outline-secondary')
         shortlist.click()
         time.sleep(5)
     else:
-        print("Browse: No online articles for the given date range. Returning.")
-        online_articles = False
+        print("Browse: No print articles for the given date range. Returning.")
+        print_articles = False
 
-    return browser, online_articles
+    return browser, print_articles
 
 def browse_download_pdf(browser, download_dir):
     pdf_file = None
@@ -107,10 +107,10 @@ def browse_download_pdf(browser, download_dir):
     if str(old_filename).endswith('.pdf') and date.fromtimestamp(os.path.getmtime(old_filename)) == date.today():
         print("Browse: Downloaded file with name: ", old_filename)
 
-        new_name = 'Online Articles- ' + date.today().strftime("%d %B")
-        if not os.path.exists(download_dir+'Online Articles'):
-            os.makedirs(download_dir+'Online Articles')
-        new_filename = download_dir+ 'Online Articles/' + new_name
+        new_name = 'Print Articles- ' + date.today().strftime("%d %B")
+        if not os.path.exists(download_dir+'Print Articles'):
+            os.makedirs(download_dir+'Print Articles')
+        new_filename = download_dir+ 'Print Articles/' + new_name
         os.rename(old_filename, new_filename)
         print("Browse: Renamed file as: ", new_filename)
         pdf_file = new_filename
@@ -136,10 +136,10 @@ def browse_download_csv(browser, download_dir):
     if str(old_filename).endswith('.xlsx') and date.fromtimestamp(os.path.getmtime(old_filename)) == date.today():
         print("Browse: Downloaded file with name: ", old_filename)
 
-        new_name = 'Online Articles- ' + date.today().strftime("%d %B") + '.xlsx'
-        if not os.path.exists(download_dir+'Online Repo'):
-            os.makedirs(download_dir+'Online Repo')
-        new_filename = download_dir+ 'Online Repo/' + new_name
+        new_name = 'Print Articles- ' + date.today().strftime("%d %B") + '.xlsx'
+        if not os.path.exists(download_dir+'Print Repo'):
+            os.makedirs(download_dir+'Print Repo')
+        new_filename = download_dir+ 'Print Repo/' + new_name
         os.rename(old_filename, new_filename)
         print("Browse: Renamed file as: ", new_filename)
 

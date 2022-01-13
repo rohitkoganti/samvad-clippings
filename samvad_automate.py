@@ -1,5 +1,5 @@
 from mailsendsmtp import send_mail
-from browse import login, browse_search, browse_download_pdf, browse_download_csv
+from browse import login, browse_search, browse_download_pdf, browse_download_csv, browse_download_images
 from parse_csv import parse_csv
 import browse
 import mailsendsmtp
@@ -25,30 +25,30 @@ def main():
     global receiver_mail
 
     if len(sys.argv) > 1:
-        print("Argument: Receiver mail is ", sys.argv[1])
+        print("Argument: Receiver mail is", sys.argv[1])
         receiver_mail = [str(sys.argv[1])]
 
     browser = login(url, samvad_id, samvad_pw, download_dir)
     if browser:
         browser, print_articles = browse_search(browser)
         if print_articles:
-            browser, pdf_file = browse_download_pdf(browser, download_dir)
-            if pdf_file:
-                csv_file = browse_download_csv(browser, download_dir)
-                if csv_file:
-                    headlines = parse_csv(csv_file)
-                    if headlines:
-                        err = send_mail(user_name, user_mail, password, receiver_mail, pdf_file, headlines)
+            browser, csv_file = browse_download_csv(browser, download_dir)
+            if csv_file:
+                headlines = parse_csv(csv_file)
+                if headlines:
+                    images_downloaded, final_dir = browse_download_images(browser, headlines, download_dir)
+                    if images_downloaded:
+                        err = send_mail(user_name, user_mail, password, receiver_mail, headlines, final_dir)
                         if not err:
                             print('Send: Mail sent successfully!')
                         else:
                             print('Send: Mailing failed, reverting with error message: ', err)
                     else:
-                        print('Parse: Failed to parse csv file correctly. Looping back.')
+                        print('Download: Failed to download image clippings')
                 else:
-                    print('Download: Failed to download csv. Looping back.')
+                    print('Parse: Failed to parse csv file correctly. Looping back.')
             else:
-                print('Download: Failed to download pdf. Looping back.')
+                print('Download: Failed to download csv. Looping back.')
         else:
             print('Search: No print articles found. Looping back.')
     else:

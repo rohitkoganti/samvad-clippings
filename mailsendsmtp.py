@@ -15,7 +15,6 @@ Dear sir,
 '''
 
 mail_tail = '''
-<br>Thank you.
 <br>
 <br>Regards,
 <br>Rohit Koganti
@@ -27,8 +26,7 @@ mail_tail = '''
 '''
 
 
-def send_mail(sender_name, sender_address, sender_pass, receiver_address, filename, headlines):
-    basename = os.path.basename(filename)
+def send_mail(sender_name, sender_address, sender_pass, receiver_address, headlines, final_dir):
 
     #Setup the MIME and creating headers
     print("Send: Generating the mail body.")
@@ -47,18 +45,21 @@ def send_mail(sender_name, sender_address, sender_pass, receiver_address, filena
             journalist = 'NA'
         link = line[7]
         body+= str(i+1) + '. <b>' + title + '</b>' + ' <br>'
-        body+= 'Source: ' + source + '&ensp;|&ensp;' + 'Journalist: ' + journalist + ' <br>'
-        body+= 'Link: ' + link + ' <br><br>'
+        body+= 'Source: ' + source + '&ensp;|&ensp;' + 'Journalist: ' + journalist + ' <br><br>'
+#        body+= 'Link: ' + link + ' <br><br>'  #Removing the link of the article from the mail body as there are no login credentials for the end-user
 
     mail_content = mail_head + body + mail_tail
     message.attach(MIMEText(mail_content, 'html'))
-    attach_file = open(filename, 'rb') # Open the file as binary mode
-    payload = MIMEBase('application', 'octate-stream', Name= basename+'.pdf')
-    payload.set_payload((attach_file).read())
-    encoders.encode_base64(payload) #encode the attachment
-    #add payload header with filename
-    payload.add_header('Content-Decomposition', 'attachment', filename=basename)
-    message.attach(payload)
+
+    for filename in sorted(os.listdir(final_dir)):
+        f = os.path.join(final_dir, filename)
+        attach_file = open(f, 'rb') # Open the file as binary mode
+        payload = MIMEBase('application', 'octate-stream', Name= filename)
+        payload.set_payload((attach_file).read())
+        encoders.encode_base64(payload) #encode the attachment
+        #add payload header with filename
+        payload.add_header('Content-Decomposition', 'attachment', filename=filename)
+        message.attach(payload)
 
     #Create SMTP session for sending the mail
     print("Send: Attempting to login to gmail.")

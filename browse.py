@@ -143,9 +143,38 @@ def browse_download_csv(browser, download_dir):
         os.rename(old_filename, new_filename)
         print("Browse: Renamed file as: ", new_filename)
 
-        browser.close()
-        return new_filename
+        return browser, new_filename
     else:
         print("Browse: Failed to download file. Returning.")
-        browser.close()
-        return False
+        return browser, False
+
+def browse_download_images(browser, headlines, download_dir):
+    print("Browse: Browsing to the news link and downloading the clippings.")
+
+    final_dir = download_dir+'Print Articles/'+ date.today().strftime("%d %B")
+    if not os.path.exists(final_dir):
+        os.makedirs(final_dir)
+
+    for i,line in enumerate(headlines):
+        link = line[7]
+        browser.get(link)
+        time.sleep(5)
+
+        soup = BeautifulSoup(browser.page_source, "lxml")
+
+        for j, link in enumerate(soup.select("img[src^=http]")):
+            lnk = link["src"]
+            if j == 0:
+                img_name = str(i+1) + '.jpg'
+            else:
+                img_name = str(i+1) + '_' + str(j) + '.jpg'
+            print("Browse: Downloading image clipping from: ", str(lnk), " as :", img_name)
+            save_file_name = os.path.join(final_dir, img_name)
+            with open(save_file_name,"wb") as f:
+                f.write(requests.get(lnk).content)
+    browser.close()
+
+    if len(os.listdir(final_dir)) > 0:
+        return True, final_dir
+    else:
+        return False, None

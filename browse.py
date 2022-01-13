@@ -17,7 +17,7 @@ def login(url, samvad_id, samvad_pw, download_dir):
     profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/pdf')
 
     opts = FirefoxOptions()
-    #opts.add_argument("--headless")
+    opts.add_argument("--headless")
 
     browser = webdriver.Firefox(options=opts, firefox_profile=profile,\
         log_path= download_dir +'geckodriver-v0.29.1-linux64/geckodriver.log', \

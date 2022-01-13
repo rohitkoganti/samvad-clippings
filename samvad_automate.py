@@ -10,7 +10,7 @@ user_name = 'Rohit Koganti'
 user_mail = 'koganti.rohit@gmail.com'
 password = 'jfkolhusmgoqxgas'
 #receiver_mail = ['koganti.rohit@gmail.com', 'pstohvpi@gmail.com', 'ajaygadevpioffice@gmail.com', 'ashok.dewan@nic.in', \
-#    'secygen.rs@sansad.nic.in', 'kota.gandhi@gmail.com', 'njoshivpioffice@gmail.com', \
+#    'secygen.rs@sansad.nic.in', 'pc.mody.sgrs@gmail.com', 'kota.gandhi@gmail.com', 'njoshivpioffice@gmail.com', \
 #    'pawandilshad@gmail.com', 'pscell-vps@nic.in', 'ps-vps@nic.in', 'rajyasabhamediaunit@gmail.com', \
 #    'secyvp@sansad.nic.in', 'ivsr12@gmail.com', 'sureshaps14@gmail.com', 'apsvikrant@gmail.com', 'vpsecretariat@gmail.com', \
 #     'myellaps@yahoo.com', 'satyam1957.hyd@gmail.com']

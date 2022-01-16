@@ -17,7 +17,7 @@ def login(url, samvad_id, samvad_pw, download_dir):
     profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/pdf')
 
     opts = FirefoxOptions()
-    #opts.add_argument("--headless")
+    opts.add_argument("--headless")
 
     browser = webdriver.Firefox(options=opts, firefox_profile=profile,\
         log_path= download_dir +'geckodriver-v0.29.1-linux64/geckodriver.log', \
@@ -86,7 +86,7 @@ def browse_search(browser):
             shortlist = browser.find_element_by_css_selector('.btn-outline-secondary')
             shortlist.click()
             time.sleep(5)
-            break  
+            break
     else:
         #Using the for-else condition. Else runs only when the for loop breaks.
         print("Browse: No print articles for the given date range. Returning.")

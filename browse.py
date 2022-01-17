@@ -19,34 +19,40 @@ def login(url, samvad_id, samvad_pw, download_dir):
     opts = FirefoxOptions()
     opts.add_argument("--headless")
 
-    browser = webdriver.Firefox(options=opts, firefox_profile=profile,\
-        log_path= download_dir +'geckodriver-v0.29.1-linux64/geckodriver.log', \
-        executable_path= download_dir +'geckodriver-v0.29.1-linux64/geckodriver')
+    try:
+        browser = webdriver.Firefox(options=opts, firefox_profile=profile,\
+            log_path= download_dir +'geckodriver-v0.29.1-linux64/geckodriver.log', \
+            executable_path= download_dir +'geckodriver-v0.29.1-linux64/geckodriver')
 
-    print("Browse: Opening the site samvad.media and attempting to login.")
-    browser.get(url)
+        print("Browse: Opening the site samvad.media and attempting to login.")
+        browser.get(url)
 
-    username = browser.find_element_by_id('txtUserName')
-    password = browser.find_element_by_id('txtPassword')
+        username = browser.find_element_by_id('txtUserName')
+        password = browser.find_element_by_id('txtPassword')
 
-    username.send_keys(samvad_id)
-    password.send_keys(samvad_pw)
+        username.send_keys(samvad_id)
+        password.send_keys(samvad_pw)
 
-    login_page_title = browser.title
+        login_page_title = browser.title
 
-    browser.find_element_by_id('btnLoginSubmit').click()
+        browser.find_element_by_id('btnLoginSubmit').click()
 
-    time.sleep(5)
+        time.sleep(5)
 
-    main_page_title = browser.title
+        main_page_title = browser.title
 
-    if main_page_title == 'Home | SAMV@D':
-        #print(main_page_title)
-        print("Successfully logged in!")
-        return browser
-    else:
-        print(browser.title)
-        print("Failed to login. Returning.")
+        if main_page_title == 'Home | SAMV@D':
+            #print(main_page_title)
+            print("Successfully logged in!")
+            return browser
+        else:
+            print(browser.title)
+            browser.quit()
+            return None
+            print("Failed to login. Returning.")
+    except:
+        print("Browse: Failed to start browser, returning.")
+        return None
 
 
 def browse_search(browser):
@@ -90,6 +96,7 @@ def browse_search(browser):
     else:
         #Using the for-else condition. Else runs only when the for loop breaks.
         print("Browse: No print articles for the given date range. Returning.")
+        browser.quit()
         print_articles = False
 
     return browser, print_articles
@@ -119,6 +126,7 @@ def browse_download_pdf(browser, download_dir):
         pdf_file = new_filename
     else:
         print("Browse: Failed to download file. Returning.")
+        browser.quit()
         pdf_file = False
 
     browser.find_element_by_css_selector('button.btn-info').click() #Closing the dropdown
@@ -149,6 +157,7 @@ def browse_download_csv(browser, download_dir):
         return browser, new_filename
     else:
         print("Browse: Failed to download file. Returning.")
+        browser.quit()
         return browser, False
 
 def browse_download_images(browser, headlines, download_dir):
@@ -175,7 +184,7 @@ def browse_download_images(browser, headlines, download_dir):
             save_file_name = os.path.join(final_dir, img_name)
             with open(save_file_name,"wb") as f:
                 f.write(requests.get(lnk).content)
-    browser.close()
+    browser.quit()
 
     if len(os.listdir(final_dir)) > 0:
         return True, final_dir

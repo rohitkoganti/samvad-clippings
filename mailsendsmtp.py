@@ -65,8 +65,12 @@ def send_mail(sender_name, sender_address, sender_pass, receiver_address, headli
     print("Send: Attempting to login to gmail.")
     session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
     session.starttls() #enable security
-    session.login(sender_address, sender_pass) #login with mail_id and password
-    print("Send: Logged in, sending mail.")
+    try:
+        session.login(sender_address, sender_pass) #login with mail_id and password
+        print("Send: Logged in, sending mail.")
+    except:
+        print("Send: Failed to login to mail. Exiting.")
+        return False
     text = message.as_string()
     err = session.sendmail(sender_address, receiver_address, text)
 

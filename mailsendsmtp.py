@@ -6,6 +6,7 @@ from email.mime.base import MIMEBase
 from email.utils import formataddr
 from email import encoders
 from datetime import date
+import natsort
 
 
 mail_head = '''<html>
@@ -51,7 +52,7 @@ def send_mail(sender_name, sender_address, sender_pass, receiver_address, headli
     mail_content = mail_head + body + mail_tail
     message.attach(MIMEText(mail_content, 'html'))
 
-    for filename in sorted(os.listdir(final_dir)):
+    for filename in natsort.natsorted(os.listdir(final_dir)):
         f = os.path.join(final_dir, filename)
         attach_file = open(f, 'rb') # Open the file as binary mode
         payload = MIMEBase('application', 'octate-stream', Name= filename)

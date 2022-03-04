@@ -34,7 +34,7 @@ def send_mail(sender_name, sender_address, sender_pass, receiver_address, headli
     message = MIMEMultipart()
     message['From'] = sender_name
     message['To'] = ', '.join(receiver_address)
-    message['Subject'] = 'HVPI Print Articles - ' + date.today().strftime("%d %B")
+    message['Subject'] = 'Print Clippings of HVPI - ' + date.today().strftime("%d %B")
 
     #The body and the attachments for the mail
     body = ''
